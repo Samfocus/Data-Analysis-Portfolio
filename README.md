@@ -313,26 +313,26 @@ summary(activity_hours_clean)
 summary(daily_activities_clean)
  ```
 
-- Corellation total_steps and Total_Calories##
+- Correlation of the Total_steps and Total_Calories grouped by user id
 ```
-Total_calories_steps<- activity_hours_clean %>% 
+-Total_calories_steps<- activity_hours_clean %>% 
   group_by(id) %>% 
   summarise(Total_calories=sum(calories), Total_steps=sum(step_total))
-summary(Total_calories_steps)
+
+-summary(Total_calories_steps)
+
+-cor(Total_calories_steps$Total_calories,Total_calories_steps$Total_steps)
+
+ - The correlation is 0.5611333
+``` 
+
+- Ploting Total Calories against Total steps to visualize the correlation and distribution
+
 ```
-
-
-
-
-
-
-cor(Total_calories_steps$Total_calories,Total_calories_steps$Total_steps)
-##0.5611333 is the correlation##
-
 ggplot(data=Total_calories_steps) +
-  geom_point(mapping = aes(x =Total_steps, y =Total_calories)) +
-  geom_smooth(method="gam", mapping = aes(x =Total_steps, y =Total_calories)) +
-  theme(
+geom_point(mapping = aes(x =Total_steps, y =Total_calories)) +
+geom_smooth(method="gam", mapping = aes(x =Total_steps, y =Total_calories)) +
+theme(
     plot.title = element_text(size = 16, face = "bold"),
     axis.text.x = element_text(size = 11),
     axis.text.y = element_text(size = 11),
@@ -343,12 +343,21 @@ ggplot(data=Total_calories_steps) +
     x = "Total_Steps",
     y = "Total_Calories",
   )
+```
+- Output
+![Rplot](https://github.com/Samfocus/Portfolio-1/assets/152339100/385776cc-10c1-492d-92c1-bb912e161b29)
 
   
-Correlation between Step_total and calories
-cor(activity_hours_clean$step_total,activity_hours_clean$calories)
-## 0.814968  the correlation##
+-Correlation between Hourly Total_steps and Calories
 
+```
+cor(activity_hours_clean$step_total,activity_hours_clean$calories)
+
+ The correlation is 0.814968
+```
+- Ploting Hourly Calories against Hourly Total_steps to visualize the correlation and distribution
+  
+```
 ggplot(data = activity_hours_clean) +
   geom_point(mapping = aes(x =step_total, y =calories,color=total_intensity)) +
   geom_smooth(method="gam", mapping = aes(x = step_total, y = calories)) +
@@ -362,10 +371,14 @@ ggplot(data = activity_hours_clean) +
   ) +
   guides(color=guide_legend(title="Intensity")) +
   labs(
-    title = "correlation between steps and calories (hourly)",
+    title = "correlation between steps and calories (Hourly)",
     x = "Steps",
     y = "Calories",
   )
+```
+- Output
+![Rplot2](https://github.com/Samfocus/Portfolio-1/assets/152339100/3cb40354-7413-46e7-8ac9-1ca703cfbef9)
+
 
 ##Which days of the week are users most and least active##
 activity_hours_clean$weekday <- wday(activity_hours_clean$activity_day, label=TRUE)
