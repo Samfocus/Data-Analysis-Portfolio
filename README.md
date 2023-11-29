@@ -344,7 +344,6 @@ theme(
     y = "Total_Calories",
   )
 ```
-- Output
 ![Rplot](https://github.com/Samfocus/Portfolio-1/assets/152339100/385776cc-10c1-492d-92c1-bb912e161b29)
 
   
@@ -376,7 +375,6 @@ ggplot(data = activity_hours_clean) +
     y = "Calories",
   )
 ```
-- Output
 ![Rplot2](https://github.com/Samfocus/Portfolio-1/assets/152339100/3cb40354-7413-46e7-8ac9-1ca703cfbef9)
 
 
