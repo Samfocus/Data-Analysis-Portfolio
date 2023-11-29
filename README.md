@@ -47,7 +47,6 @@ The project is divided into five phases: ASK, PREPARE, PROCESS, ANALYZE, SHARE, 
 <h2>PREPARE PHASE</h2>
 In this phase I will download and import the dataset. Then make sure the data is well understood, organized and credible
 
-
 1.	Data source:
    
     Stakeholder encouraged me to use public data that explores smart device users’ daily habits. She points us to a specific dataset: FitBit Fitness Tracker Data: The data source   (https://www.kaggle.com/datasets/arashnic/fitbit)
@@ -64,19 +63,39 @@ In this phase I will download and import the dataset. Then make sure the data is
 
 2.	Data frame description:
    
-    The data frame includes the responses from 33 eligible Fitbit users to a distributed survey via Amazon Mechanical Turk between 03.12.2016-05.12.2016. Last modification date of the files is 2020-12-16.        The files are in long and wide formats. The highest sample size of 33 distinct correspondents in dataset confers significant limitation and may not be an accurate representation of user’s population.
+    The data frame includes the responses from 33 eligible Fitbit users to a distributed survey via Amazon Mechanical Turk between 03.12.2016 and 05.12.2016. Last modification date of the files is 2020-12-16. The files are in long and wide formats. The highest sample size of 33 distinct correspondents in dataset confers significant limitation and may not be an accurate representation of user’s population.
 
     ![image](https://github.com/Samfocus/Portfolio-1/assets/152339100/ec658cad-0909-4e24-a88b-a63da54ae675)
 
     
 
-4.	Data Integrity & limitations
-A good data source is ROCCC which stands for Reliable, Original, Comprehensive, Current, and Cited.
-Reliable - Mid level: the dataset contains only 33 participants The data is licensed by CC0: Public Domain and has a Kaggle score 10.00 (100% completeness, credibility, and compatibility)
-Original - Mid level: the dataset is provided by third party on the Public Domain data frame made available through Kaggle user Mobius.
-Comprehensive - high level: the dataset mentrics match Bellabeat's parameters, although there is no information about their gender, geographical location, professional background or other relevant data that can impact the further data analysis
-Current - Mid level: the data was collected 7 years ago in 2016 However, the data might still relevant for this task. More up-to-date data should be requested if needed. This should be discussed with the stakeholders if possible.
-Cited - low level: data collected by third party and posted on Kaggle publicly.
+3.	Data Integrity & limitations:
+
+   
+     A good data source is expected to ROCCC which stands for Reliable, Original, Comprehensive, Current, and Cited.
+
+     Reliable - Mid level: The dataset contains only 33 participants and the data is licensed by CC0: Public Domain and has a Kaggle score 10.00 (100% completeness, credibility, and compatibility).
+
+     Original - Mid level: the dataset is provided by third party on the Public Domain data frame made available through Kaggle user Mobius.
+
+     Comprehensive - high level: the dataset mentrics match Bellabeat's parameters, although there is no information about their gender, geographical location, professional background or other relevant data that can impact the further data analysis
+
+     Current - Mid level: the data was collected 7 years ago in 2016 However, the data might still be relevant for this task. More up-to-date data should be requested if needed. This should be discussed with the stakeholders if possible.
+
+     Cited - low level: data collected by third party and posted on Kaggle publicly.
+
+  4.	Tools:
+
+    	In this case study, R will be utilized for cleaning, analyzing, and formatting the data. To process the data, I considered using Excel, SQL, and R, all relying on filters, formulas, and essential functions. However, there are some files exceeding 1 million rows, like (minuteIntensitiesNarrow_merged.csv), Excel will be inadequate, making SQL and R more suitable for further data processing.
+
+    	but I choose to use R because:
+
+    	R programming loads the data more easily and faster, expecially the large files.
+
+    	R programming can be used more easily during every step of this analysis as it has better documentation functions.
+
+    	I would like to try the ggplot2 function for R visualizations, so using R in all steps will make the analysis more consistent. SQL does not have in-built visualization functionality.
+
 
 
 
