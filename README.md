@@ -313,20 +313,21 @@ summary(activity_hours_clean)
 summary(daily_activities_clean)
  ```
 
-- Correlation of the Total_steps and Total_Calories grouped by user id
+
+- There is a need to understand the correlation of the Total_steps and Total_Calories burned for the entire month of observation grouped by participants (user id)
 ```
--Total_calories_steps<- activity_hours_clean %>% 
+Total_calories_steps<- activity_hours_clean %>% 
   group_by(id) %>% 
   summarise(Total_calories=sum(calories), Total_steps=sum(step_total))
 
--summary(Total_calories_steps)
+summary(Total_calories_steps)
 
--cor(Total_calories_steps$Total_calories,Total_calories_steps$Total_steps)
+cor(Total_calories_steps$Total_calories,Total_calories_steps$Total_steps)
 
- - The correlation is 0.5611333
+  The correlation is 0.5611333
 ``` 
 
-- Ploting Total Calories against Total steps to visualize the correlation and distribution
+> Ploting Total Calories against Total steps to visualize the correlation and distribution
 
 ```
 ggplot(data=Total_calories_steps) +
@@ -346,15 +347,17 @@ theme(
 ```
 ![Rplot](https://github.com/Samfocus/Portfolio-1/assets/152339100/385776cc-10c1-492d-92c1-bb912e161b29)
 
+>> There exists a correlation of approximately 56% between total steps and total calories burned. The summarized table indicates that some participants have an average daily calorie burned of around 2,170 and an average daily step count of 7,150. The correlation suggests a connection between the total steps taken and the calories burned, with variations observed among participants in terms of average daily steps and calorie consumption.
+
   
--Correlation between Hourly Total_steps and Calories
+- I further checked for the Correlation between Hourly Total_steps and Calories to build a possible relationship
 
 ```
 cor(activity_hours_clean$step_total,activity_hours_clean$calories)
 
  The correlation is 0.814968
 ```
-- Ploting Hourly Calories against Hourly Total_steps to visualize the correlation and distribution
+> Ploting Hourly Calories against Hourly Total_steps to visualize the correlation and distribution
   
 ```
 ggplot(data = activity_hours_clean) +
@@ -377,13 +380,21 @@ ggplot(data = activity_hours_clean) +
 ```
 ![Rplot2](https://github.com/Samfocus/Portfolio-1/assets/152339100/3cb40354-7413-46e7-8ac9-1ca703cfbef9)
 
+>> There exists about 81% correlation between Hourly Calories burned and Hourly Total Steps, with a pronounced emphasis between 250 calories and 2500 steps, as evident in the chart. This substantial correlation implies a significant association between the total hourly calories burned and the total hourly steps taken, particularly within the high intensity range. Potential factors contributing to this correlation may include variations in physical activity levels and energy expenditure across different intervals of steps taken.
 
-##Which days of the week are users most and least active##
+
+
+- There is need to explore which days of the week are users most and least active
+  
+```
 activity_hours_clean$weekday <- wday(activity_hours_clean$activity_day, label=TRUE)
 avg_intensity_mins <- activity_hours_clean %>%
   group_by(weekday) %>%
   summarize(avg_intensity = mean(total_intensity))
+```
 
+> Ploting Weekdays against Average intensity per weekday to visualize its distribution
+```
 ggplot(data = avg_intensity_mins, aes(x = weekday, y = avg_intensity, fill=avg_intensity)) +
   geom_bar(stat = "identity") + geom_text(aes(label=round(avg_intensity,2)), vjust=-0.5)+
   theme(
@@ -400,15 +411,25 @@ ggplot(data = avg_intensity_mins, aes(x = weekday, y = avg_intensity, fill=avg_i
     y = "Average intensity minutes"
   ) +
   guides(fill=guide_legend(title="Average intensity"))
+```
+
+![Rplot3](https://github.com/Samfocus/Portfolio-1/assets/152339100/6fb35e77-2acc-4f85-8f9d-8b000effa7e2)
+
+>> This pattern suggests variations in users' activity levels on different days of the week. Possible causes for these fluctuations could include factors such as work schedules, fitness routines, or lifestyle preferences. The data infers that users tend to exhibit higher activity intensity on Saturdays and Tuesdays, with lower intensity on Sunday, indicating potential trends in their weekly activity patterns.
 
 
-##Which hours of the day are users most and least active##
 
+-The hours of the day users are most and least active should be considered
+
+```
 intensities_hrs_mean <- activity_hours_clean %>%
   group_by(activity_time) %>%
-  summarize(
-    avg_intensity_mins = mean(total_intensity)
-  ) 
+  summarize(avg_intensity_mins = mean(total_intensity))
+```
+
+> Ploting Hourly Activity time against Average Intensity Minutes to visualize the hourly distribution
+
+```
 ggplot(data = intensities_hrs_mean, 
        aes(x = activity_time, y = avg_intensity_mins,fill=avg_intensity_mins)
 ) +
@@ -424,17 +445,27 @@ ggplot(data = intensities_hrs_mean,
     legend.text = element_text(size = 10)
   ) +
   labs(
-    title = " Average daily intensity time distribution per hour ",
-    x = "Activity time",
-    y = " Average intensity minutes"
+    title = " Hourly Distribution of Average Daily Intensity ",
+    x = "Activity Time",
+    y = " Average Intensity Minutes"
   ) +
   guides(fill=guide_legend(title="Average intensity"))
+```
+![Rplot4](https://github.com/Samfocus/Portfolio-1/assets/152339100/18e4d389-d808-42c1-b9de-96cefb34f818)
+
+>> The hourly distribution of average daily intensity indicates distinct patterns. It is notably low between 00:00:00 - 05:00:00, significantly high between 17:00:00 - 19:00:00, and relatively elevated between 12:00:00 - 14:00:00. There is varying intensity across the other hours. Possible causes for these patterns could include users engaging in lower-intensity activities during early morning hours, higher intensity during evening probably when returning home or during evening workout session, and moderately higher activity levels during lunch hours. The data infers that users tend to exhibit specific intensity preferences during different times of the day..
 
 
-##lightly active minutes and light active distance##
+
+- Exploring the relationship of lightly active minutes and light active distance
+```
 cor(daily_activities_clean$light_active_distance,daily_activities_clean$lightly_active_minutes)
-##correlation=0.8856971##
 
+   - The Correlation is 0.8856971
+```
+   > Ploting lightly active minutes and light active distance to visualize its distribution
+
+```
 ggplot(data = daily_activities_clean) +
   geom_point(mapping = aes(x = light_active_distance, y = lightly_active_minutes,color=calories)) +
   geom_smooth(mapping = aes(x = light_active_distance, y = lightly_active_minutes)) +
@@ -447,17 +478,26 @@ ggplot(data = daily_activities_clean) +
     legend.text = element_text(size = 15)
   ) +
   labs(
-    title = "Correlation between 'lightly active' distance\n& 'lightly active'minutes (daily)",
-    x = "'Lightly active' distance",
-    y = "'Lightly active' minutes"
+    title = "Correlation between 'Lightly Active' Distance\n& 'lightly Active'Minutes (daily)",
+    x = "'Lightly Active' Distance",
+    y = "'Lightly Active' Minutes"
   )
+```
+![Rplot 5](https://github.com/Samfocus/Portfolio-1/assets/152339100/d8178495-61fd-46ed-9fb0-a1672d597c4a)
+
+>> Analyzing the connection between lightly active minutes and the distance covered during light activity reveals a strong correlation of about 89%. This suggests a strong positive relationship between the duration of light activity and the corresponding distance covered. Possible causes for this high correlation could include users engaging in consistent light activities, such as walking, jogging, or other low-intensity exercises, resulting in a proportional increase in both light active minutes and distance covered. The data infers that users who accumulate more minutes in light activity also tend to cover longer distances during these activities
 
 
-##fairly active minutes and moderately active distance##
+- Fairly active minutes and moderately active distance
+
+```
 cor(daily_activities_clean$moderately_active_distance,daily_activities_clean$fairly_active_minutes)
-##correlation=0.946934)
 
-ggplot(data = activity_days_clean) +
+The correlation is 0.946934
+```
+> Ploting Fairly active minutes and moderately active distance to visualize its distribution
+```
+ggplot(data = daily_activities_clean) +
   geom_point(mapping = aes(x =moderately_active_distance, y = fairly_active_minutes,color=calories)) +
   geom_smooth(mapping = aes(x = moderately_active_distance, y = fairly_active_minutes)) +
   theme(
@@ -469,16 +509,27 @@ ggplot(data = activity_days_clean) +
     legend.text = element_text(size = 15)
   ) +
   labs(
-    title = "Relationship between 'moderately active' distance\nand 'fairly active' time (daily)",
-    x = "'Moderately active' distance",
-    y = "'Fairly active' minutes"
+    title = "Relationship Between 'Moderately Active' Distance\nand 'Fairly Active' Time (Daily)",
+    x = "'Moderately Active' Distance",
+    y = "'Fairly Active' Minutes"
   )
+```
+
+![Rplot6](https://github.com/Samfocus/Portfolio-1/assets/152339100/be2b70d5-1bbd-418a-87a9-ea6d9baf9847)
+
+>> Examining the association between fairly active minutes and the distance covered during moderate activity reveals a remarkably high correlation of 0.946934. This indicates a strong positive relationship between the duration of fairly active minutes and the corresponding distance covered during moderate activities. The elevated correlation may stem from users consistently engaging in both fairly active minutes and moderate-distance activities between 50 minutes and 3km. This suggests that users who accumulate more minutes in fairly active activities also tend to cover longer distances during moderate-intensity exercises. The data infers a robust connection between these two variables in the users' activity records.
 
 
-##correlation between very active minutes and very active distance##
+- we need to also analyze the correlation between very active minutes and very active distance
+  
+```
 cor(daily_activities_clean$very_active_distance,daily_activities_clean$very_active_minutes)
-##correlation=0.8266815##
 
+The correlation is 0.8266815
+```
+> Ploting  very active minutes and very active distance to visualize its distribution
+
+```
 ggplot(data = daily_activities_clean) +
   geom_point(mapping = aes(x =very_active_distance, y =very_active_minutes,color=calories)) +
   geom_smooth(mapping = aes(x = very_active_distance, y = very_active_minutes)) +
@@ -495,10 +546,24 @@ ggplot(data = daily_activities_clean) +
     x = "'Very active' distance",
     y = "'Very active' minutes"
   )
+```
 
+![Rplot7](https://github.com/Samfocus/Portfolio-1/assets/152339100/404a9fd7-97b6-4382-b062-0afc7a821a7c)
+
+>> Exploring the connection between very active minutes and the distance covered during very active activities, a robust correlation of 0.8266815 is evident. This substantial correlation suggests a strong positive relationship between the duration of very active minutes and the corresponding distance covered during high-intensity activities. The notable correlation may arise from users consistently participating in both very active minutes and activities covering a distance of 6 km within a 60-minute timeframe. This observation implies a consistent and synchronized engagement in very active minutes and the associated distance among the users, reflecting a coherent pattern in their activity records.
+
+
+- The correlation between Time in bed and the time asleep
+  
+```
 cor(sleep_days$total_minutes_asleep,sleep_days$total_time_in_bed)
-### correlation is 0.9304224##
 
+The correlation is 0.9304224
+
+```
+> Ploting the time in bed and the time asleep to visualize its distribution
+
+```
 ggplot(data = sleep_days) +
   geom_point(mapping = aes(x = total_minutes_asleep, y =total_time_in_bed)) +
   geom_smooth(mapping = aes(x = total_minutes_asleep, y = total_time_in_bed)) +
@@ -513,15 +578,23 @@ ggplot(data = sleep_days) +
   labs(
     title = "Correlation between total minutes asleep \n & total time in bed",
     x = "Total minutes asleep",
-    y = "Total time in bed"
-  )
+    y = "Total time in bed")
+ ```
+
+![Rplot8](https://github.com/Samfocus/Portfolio-1/assets/152339100/0901586f-adf2-4ce1-bd36-3102aefe6e1c)
+
+>> Investigating the relationship between time spent in bed and the actual duration of sleep, a strong correlation of 0.9304224 is observed. This indicates a high positive association between the time individuals spend in bed and the corresponding time they are asleep. To express this correlation as a percentage, it equates to approximately 93.04%, suggesting that there is a consistent and significant connection between the two variables. In practical terms, this high correlation infers that as the time spent in bed increases, there is a corresponding increase in the time individuals spend asleep, emphasizing a substantial synchronization in their sleep patterns
 
 
-
+```
 sleep_days$dif_tbed_tsleep<-sleep_days$total_time_in_bed-sleep_days$total_minutes_asleep
 
 sleep_days$weekday <- wday(sleep_days$sleep_day, label=TRUE)
+```
 
+> Ploting the time in bed and the time asleep to visualize its distribution
+
+```
 ggplot(data = sleep_days) +
   geom_point(mapping = aes(x = weekday, y = dif_tbed_tsleep)) +
   geom_smooth(mapping = aes(x = weekday, y = dif_tbed_tsleep)) +
@@ -534,103 +607,38 @@ ggplot(data = sleep_days) +
     legend.text = element_text(size = 15)
   ) +
   labs(
-    title = "Correlation between time awake in bed(minutes) and weekday",
-    x = "'weekday",
-    y = "'Time awake in bed"
-  )
+    title = "Correlation between time awake in bed(minutes)& Weekday",
+    x = "Weekday",
+    y = "Time awake in bed")
+```
 
+![Rplot9](https://github.com/Samfocus/Portfolio-1/assets/152339100/695ca556-d916-40ed-9caa-52a0c77551e1)
 
+ >> Most of the participants average sleep duration is around 7 hours on weekdays apart from Sundays which is slightly higher.
+ 
+ 
+## Key findings
+    
+- It was noted that the daily step count of the majority of participants falls below the recommended threshold set by the CDC, which advises most adults to target 10,000 steps per day—roughly equivalent to 8 kilometers or 5 miles.
 
+- On average, participants covered a distance of 5 km per day, with 60% of this distance attributed to slow walking. The average intensity of physical activity was evenly distributed throughout the week, with a preference for exercising during the lunch break or post-work hours.
 
+- A significant positive correlation was identified between the distances covered and the intensity of physical activity.
 
+- Generally, there was a direct relationship between the number of steps taken and the calories burned; however, there were instances where the Fitbit app indicated calorie expenditure during sedentary periods with zero steps
 
+## Recommendations for the Bellabeat fitness tracker
+  
+- Ensure continuous tracking of all user activities within the application 24/7.
+- Customize the app's minimum activity goals for each individual user to ensure they are attainable, fostering motivation through goal achievement.
+- Promote increased user activity and evenly distribute activities throughout the day and week. Place particular emphasis on tracking Sunday activities and encouraging engagement before 10:00 and after 20:00, leading up to bedtime.
+- Implement a feature in the tracker to discern whether it is on the user's body or not. This is crucial to prevent inaccurate user information. The application should prohibit calorie estimation in the absence of tracked activity.
 
-
-
-
-
-## Analyzing and Visualizing Data
-
-As per available data, following correlations have been analyzed and visualized:
-
-### Avg. Steps Taken Weekly
-
-In the first analysis average steps taken by the participants weekly has been observed and found that Sunday being the lowest, 6991 steps, Tuesday and Saturday shares higher number which is above 8000 and other days are roughly around 7500 steps.
-
-<img src='./visualizations/Average Steps Taken Through Weekdays_2color.png' width=1024>
-
-Moreover, breakdown of each participants' average step counts throughout the weekdays have been plotted for better understanding of the movement pattern of the participants.
-
-<img src='./visualizations/Avg Steps Taken by Participants on Weekdays.png' width=668>
-
-#### Speculation
-
-Participants are not consistent with maintaining their movement. On Sunday (holiday) participants tend to be more sedentary than the other days of the week. Moreover, it has been observed that most of the participants do not meet the 10,000 steps recommendation by CDC (Centers for Disease Control and Prevention) [1].
-
-### Participants' Pattern of Being Sedentary
-
-The below mentioned table portrays each participants'  sedentary days. This helps to observe which participant is more careful and serious about wearing the fitness tracker and measure sedentary and activity minutes.
-
-Moreover, average sedentary minutes by participants have been plotted in color mapped table in the following picture and it can be observed that almost half of the participants seem to have higher sedentary minutes.
-
-<img src='./visualizations/Avg Sedentary Minutes of Participants.png' width= 920>
-
-#### Speculation
-
-1. Half of the participants spend most of the day without any significant movement or exercise which has been marked in Red colored shades.
-2. Some of the participants have high number of sedentary days, indicating fitness tracker not being worn. Similar incident might have happened for the dark red shades of the color mapped table above which might be the result of tracker not being worn for some part of the day.
-
-### Time Spent in Different Activity Categories
-
-Time spent in different activity types has been visualized by weekdays. This shows that most of the time spent by the participants is in the lightly active category averaging 192.7 minutes. Although average very active time (21.8 minutes) is slightly higher than the fairly active time (13.6 minutes) spent throughout the weekdays, these values are far behind the lightly active minutes.
-
-<img src='./visualizations/Active Time.png' width=986>
-
-#### Speculation
-
-Light activity includes regular daily activities such as walking slowly, sitting and using computer, light standing work i.e. cooking, washing dishes etc., fishing sitting, playing instruments etc[2]. Above visualization means that most of the participants are not very active and conscious about being active and keeping healthy lifestyle.
-
-### Calories Burnt During Active Time
-
-Average calories burnt during active time on weekdays has been measured and visualized. Here, summation of lightly active, moderately active and very active time has been considered as "Total Active Minutes". Average of Total Active Minutes and Average of Calories Burnt throughout the weekdays have been plotted.
-
-<img src='./visualizations/Avg Calories Burnt During Active Time.png' width=737>
-
-Moreover, the average calories burnt by the individual participants has been analyzed and it has been observed that half of the participants have calories burnt below 2000 mark.
-
-<img src='./visualizations/Avg Calories Burnt by Participants.png' width=737>
-
-#### Speculation
-
-Calorie burning requirement differs according to age, body weight, sex and calorie intake. These information are missing in this data set. Only weight information is available but for only 8 IDs and none of these weight logs represent any changes overtime. However, despite all of these missing information, as per general guideline women typically burn about 2000 calories per day and men burn about 2500 calories per day[3]. As per this guideline, the calories burnt throughout the weekdays are within this range.
-
-### Sleeping Durations of Participants
-
-Average sleep duration of the participants throughout the weekdays have been measured and visualized in order to get information about average sleeping hours and sleeping patterns of participants.
-
-<img src='./visualizations/Sleep Durations.png' width=484>
-
-#### Speculation
-
-Although there were not age information of the participants, it is recommended that an adult (18-60 years) gets 7 hours and more sleep everyday [4]. In contrast to this information, most of the participants sleep duration is less than 7 hours on weekdays apart from Sunday, which is holiday.
-
-## Summary
-
-Although the data set lacked reliability and comprehensiveness due to lack of proper data collection time-line; participants age, gender, sex and profession the data set yielded some usage pattern of the Fitbit fitness tracker users. Since healthy life-style gets down to participants' calorie usage and resting pattern, the activity time, steps taken, calories burnt, sedentary habits and sleep durations have been analyzed and visualized.  Firstly, in case of activity it has been observed that most of the participants do not meet the 10,000 steps requirement by CDC. Moreover, half of the participants spend most of the day without any significant movement. However, the calorie burning requirement meets the desired value (men 2500 cal, women: 2000 cal) for half of the participants. This might be indicative of light exercise being done by the participants. On the other hand, considering sedentary condition, 1/3 of the participants have very high value of sedentary minutes. Some of the sedentary values might be indicative of tracker not being worn all the time throughout the day. On account of sleep, average sleeping duration is below 8 hour mark even Sunday being the highest  with 7.1 hours.
-
-## Conclusion and Recommendation
-
-As per Bellabeat stakeholder recommendation, Fitbit user open data has been analyzed to identify patterns of fitness device usage. Although the data set lacked some information, as per analysis following recommendations can be provided:
-
-1. There has been high number of sedentary minutes observed in the data set. Potential cause of it might be not wearing the fitness tracker for long time in a day. The tracker needs to have feature to identify when it's on the users body or not. Otherwise this can produce wrong information about the user.
-2. Users need to be notified about the lacking activity periodically. Users can be emailed most appropriately show as notification on the cellphone screen. In addition, calorie intake tracking can be introduced and thus curated activity plan can be suggested by the application.
 
 ## References
 
-1. Lifestyle Coach Facilitation Guide: Post-Core: https://www.cdc.gov/diabetes/prevention/pdf/postcurriculum_session8.pdf
-2. Examples of Moderate and Vigorous Physical Activity: https://www.hsph.harvard.edu/obesity-prevention-source/moderate-and-vigorous-physical-activity/
-3. How Many Calories Should You Burn Daily: https://www.nike.com/a/how-many-calories-should-you-burn-daily
-4. How Much Sleep Do I Need?: https://www.cdc.gov/sleep/about_sleep/how_much_sleep.html
+1. https://www.medicalnewstoday.com/articles/how-many-steps-should-you-take-a-day#:~:text=Walking%20is%20a%20form%20of,8%20kilometers%2C%20or%205%20miles.
+2. How Many Calories Should You Burn Daily: https://www.nike.com/a/how-many-calories-should-you-burn-daily
 
 
 
@@ -648,58 +656,3 @@ As per Bellabeat stakeholder recommendation, Fitbit user open data has been anal
 
 
 
-
-
-
-
-
-
-<h2>Languages and Utilities Used</h2>
-
-- <b>PowerShell</b> 
-- <b>Diskpart</b>
-
-<h2>Environments Used </h2>
-
-- <b>Windows 10</b> (21H2)
-
-<h2>Program walk-through:</h2>
-
-<p align="center">
-Launch the utility: <br/>
-<img src="https://i.imgur.com/62TgaWL.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-<br />
-<br />
-Select the disk:  <br/>
-<img src="https://i.imgur.com/tcTyMUE.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-<br />
-<br />
-Enter the number of passes: <br/>
-<img src="https://i.imgur.com/nCIbXbg.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-<br />
-<br />
-Confirm your selection:  <br/>
-<img src="https://i.imgur.com/cdFHBiU.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-<br />
-<br />
-Wait for process to complete (may take some time):  <br/>
-<img src="https://i.imgur.com/JL945Ga.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-<br />
-<br />
-Sanitization complete:  <br/>
-<img src="https://i.imgur.com/K71yaM2.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-<br />
-<br />
-Observe the wiped disk:  <br/>
-<img src="https://i.imgur.com/AeZkvFQ.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-
-<!--
- ```diff
-- text in red
-+ text in green
-! text in orange
-# text in gray
-@@ text in purple (and bold)@@
-```
---!>
