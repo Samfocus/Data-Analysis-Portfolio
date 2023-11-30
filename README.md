@@ -618,7 +618,8 @@ ggplot(data = sleep_days) +
 ![Rplot9](https://github.com/Samfocus/Portfolio-1/assets/152339100/695ca556-d916-40ed-9caa-52a0c77551e1)
 
  >> Most of the participants average sleep duration is around 7 hours on weekdays apart from Sundays which is slightly higher.
- 
+
+ ## ACT PHASE
  
 ## Key findings
     
