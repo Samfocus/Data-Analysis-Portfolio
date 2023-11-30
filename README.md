@@ -1,16 +1,16 @@
 # Data Analysis Project
-<h1>This project is a capstone case study for the Google Data Analytics Professional Certificate</h1>
+This project is a capstone case study for the Google Data Analytics Professional Certificate</h1>
 
 
 ## Description
 The following analysis is a capstone project requirement for the Google Data Analytics Certification. In this analysis, I will be focusing on Bellabeat, a wellness technology company focused on health-related products for women
-<br />
+
 
 
 ## Introduction
 Bellabeat, a cutting-edge manufacturer of health-focused products for women, envisions growing from a successful small company to a prominent player in the global smart device market. Bellabeat wants to analyze data that could help unlock new growth opportunities for the Company. As a junior data analyst working with the marketing team, i have been tasked with exploring and analyzing  a data from third-party health devices. The goal is to understand user habits and leverage this information to identify growth opportunities for their own products.
 The project is divided into five phases: ASK, PREPARE, PROCESS, ANALYZE, SHARE, and ACT phase.
-<br />
+
 
 ## ASK PHASE
 1.	BUSINESS TASK:
@@ -77,7 +77,7 @@ In this phase I will download and import the dataset. Then make sure the data is
 |  Heart rate        |                    |                    |                    |  Seconds (Wide)    |      1        |
 |  Daily Activities  |                    |                    |                    |      Wide          |      1        |
 |  Mets              |                    |                    |    Minutes(Long)   |                    |      1        |
-|  Mets              |                    |                    |                    |          Total     |      18       |
+|                    |                    |                    |                    |          Total     |      18       |
 
 
     
@@ -127,8 +127,8 @@ In R studio environment, i uploaded the packages and related libraries that will
 
 - Loading the (18) dataset
 
-  ```R
-    library(readr)
+  ```
+  > library(readr)
   > minuteMETsNarrow_merged <- read_csv("C:/Users/irewo/Downloads/archive (2)/Fitabase Data 4.12.16-5.12.16/fitbase Data/minuteMETsNarrow_merged.csv")
   > View(minuteMETsNarrow_merged)
   > library(readr)
@@ -190,10 +190,13 @@ In R studio environment, i uploaded the packages and related libraries that will
 After loading the data and reviewing it, I observed that ***dailyCalories_merged***, ***dailySteps_merged*** and ***dailyIntensities_merged*** were all included in ***dailyActivities_merged***. Therefore, I excluded the 3 data frames from the analysis. 
 
 Furthermore, I excluded 6 more data frames:
- - minuteIntensitiesNarrow_merged and minuteIntensitiesWide_merged have a column “Intensity” with values 0,1,2,3.... These values are not clear, and there is no additional explanation for what these values mean.
- - minuteCaloriesWide_merged and minuteStepsWide_merged was also exclude because their long format is preferred
- - minuteMETsNarrow_merged was excluded because we will be using the calorie data instead.
- - minuteSleep_merged have a column “Value” with values 1,2,3 which is not clear, and there is no additional explanation on what these values mean.
+  - minuteIntensitiesNarrow_merged and minuteIntensitiesWide_merged have a column “Intensity” with values 0,1,2,3.... These values are not clear, and there is no additional explanation for what these values mean.
+    
+  - minuteCaloriesWide_merged and minuteStepsWide_merged was also exclude because their long format is preferred
+    
+  - minuteMETsNarrow_merged was excluded because we will be using the calorie data instead.
+    
+  - minuteSleep_merged have a column “Value” with values 1,2,3 which is not clear, and there is no additional explanation on what these values mean.
    
 We further went to check if the selected 9 data frames actually include the data from 30 participants, as it was mentioned in the metadata. This is important that none of the data frames have less than 30 participants to ensure their credibility for the analysis. I used the ***(n_distinct) function***.
 
@@ -305,7 +308,7 @@ I further rechecked if the duplicated data has been removed.
 ```
 
 ## ANALYZE AND SHARE PHASE
--Descriptive analysis
+- Descriptive analysis
 
 ```
 summary(daily_activities_clean)
